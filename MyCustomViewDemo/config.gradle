@@ -1,0 +1,38 @@
+def supportVersion = "26.0.2"
+//读取local.properties字段信息
+public getLocalProperties(String name){
+    //加载资源
+    def proFile = file(rootDir.absolutePath + "/local.properties")
+    Properties p = new Properties()
+    proFile.withInputStream { stream ->
+        p.load(stream)
+    }
+    String res = p.getProperty(name);
+
+    if (null == res) {
+        throw new Exception("请手动设置 local.properties ")
+    }
+}
+
+ext {
+    android = [
+            compileSdkVersion:   25,
+            buildToolsVersion:  '26.0.2',
+            applicationId:      'com.example.administrator.mycustomviewdemo',
+            minSdkVersion:      15,
+            targetSdkVersion:   25,
+            versionCode:         1,
+            versionName:        '1.0',
+            key_store:          getLocalProperties('key_store.file'),
+            key_store_password: getLocalProperties("key_store_password"),
+            key_alias_password: getLocalProperties("key_alias_password"),
+            key_alias: getLocalProperties("key_alias"),
+    ]
+
+
+    dependencies = [
+            "appcompat-v7"   : 'com.android.support:appcompat-v7:25.3.1',
+            "junit"          : 'junit:junit:4.12',
+            "constraint"     : 'com.android.support.constraint:constraint-layout:1.0.2'
+    ]
+}
